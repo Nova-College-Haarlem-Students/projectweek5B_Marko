@@ -1,0 +1,215 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f2f2f2;
+    color: #222222;
+}
+
+header, footer {
+    background: #1f3a5f;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+footer {
+    margin-top: 40px;
+    color: #cccccc;
+}
+
+h2 {
+    color: #1f3a5f;
+    text-align: center;
+}
+
+/* Navigatie */
+.navbar {
+    background: #2d5286;
+    padding: 10px;
+    text-align: center;
+}
+
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 10px;
+    line-height: 2;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Filter en sorteren */
+.filter {
+    background: #ffffff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.filter button {
+    background: #f39c12;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    margin: 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.filter button:hover {
+    background: #d68910;
+}
+
+.filter select {
+    width: auto;
+    padding: 8px;
+    margin: 4px;
+}
+
+/* Diensten als kaarten */
+.diensten {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.dienst {
+    background: #ffffff;
+    padding: 15px;
+    width: 220px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dienst h3 {
+    color: #1f3a5f;
+}
+
+.prijs {
+    font-weight: bold;
+    font-size: 18px;
+    color: #f39c12;
+}
+
+/* Detail en formulieren */
+.detail {
+    background: #ffffff;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.detail.breed {
+    max-width: 1000px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 80px;
+}
+
+.knop {
+    display: inline-block;
+    background: #1f3a5f;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    margin-top: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.knop:hover {
+    background: #2d5286;
+}
+
+/* Vrije tijden */
+.tijden button {
+    background: #e8eef5;
+    border: 1px solid #1f3a5f;
+    padding: 8px 12px;
+    margin: 10px 4px 0 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tijden button:hover {
+    background: #1f3a5f;
+    color: #ffffff;
+}
+
+/* Tabellen */
+.tabel {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.tabel th, .tabel td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.tabel th {
+    background: #1f3a5f;
+    color: #ffffff;
+}
+
+.tabel a {
+    color: #1f3a5f;
+    margin-right: 8px;
+}
+
+/* Statistieken */
+.cijfers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.cijfer {
+    background: #ffffff;
+    padding: 15px;
+    width: 220px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.cijfer p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f39c12;
+}
+
+/* Meldingen */
+.fout {
+    background: #fde2e2;
+    color: #a30000;
+    padding: 10px;
+}
