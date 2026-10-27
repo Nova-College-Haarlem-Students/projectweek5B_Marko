@@ -213,3 +213,10 @@ textarea {
     color: #a30000;
     padding: 10px;
 }
+
+.melding {
+    background: #e8eef5;
+    color: #1f3a5f;
+    padding: 10px;
+    border-left: 4px solid #f39c12;
+}

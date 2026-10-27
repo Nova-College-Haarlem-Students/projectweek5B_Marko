@@ -1,4 +1,19 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+
+if ($_SESSION['role'] != 'medewerker' && $_SESSION['role'] != 'admin') {
+    echo "Je mag deze pagina niet bekijken";
+    exit;
+}
+
+require 'database.php';
+
+$stmt = $conn->prepare("SELECT * FROM diensten WHERE deleted_at IS NULL");
+$stmt->execute();
+$diensten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail breed">
@@ -16,39 +31,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>APK-keuring</td>
-                    <td>45 min</td>
-                    <td>&euro; 39,95</td>
-                    <td>
-                        <a href="diensten_detail.php?id=1">Bekijk</a>
-                        <a href="diensten_wijzig.php?id=1">Wijzig</a>
-                        <a href="diensten_softdelete.php?id=1">Uitzetten</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Kleine beurt</td>
-                    <td>60 min</td>
-                    <td>&euro; 129,00</td>
-                    <td>
-                        <a href="diensten_detail.php?id=2">Bekijk</a>
-                        <a href="diensten_wijzig.php?id=2">Wijzig</a>
-                        <a href="diensten_softdelete.php?id=2">Uitzetten</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Grote beurt</td>
-                    <td>120 min</td>
-                    <td>&euro; 279,00</td>
-                    <td>
-                        <a href="diensten_detail.php?id=3">Bekijk</a>
-                        <a href="diensten_wijzig.php?id=3">Wijzig</a>
-                        <a href="diensten_softdelete.php?id=3">Uitzetten</a>
-                    </td>
-                </tr>
+                <?php foreach ($diensten as $dienst) : ?>
+                    <tr>
+                        <td><?php echo $dienst['naam'] ?></td>
+                        <td><?php echo $dienst['duur_minuten'] ?> min</td>
+                        <td>&euro; <?php echo $dienst['prijs'] ?></td>
+                        <td>
+                            <a href="diensten_detail.php?id=<?php echo $dienst['dienst_id'] ?>">Bekijk</a>
+                            <a href="diensten_wijzig.php?id=<?php echo $dienst['dienst_id'] ?>">Wijzig</a>
+                            <a href="diensten_softdelete.php?id=<?php echo $dienst['dienst_id'] ?>">Uitzetten</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

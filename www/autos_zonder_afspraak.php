@@ -1,4 +1,23 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+
+if ($_SESSION['role'] != 'medewerker' && $_SESSION['role'] != 'admin') {
+    echo "Je mag deze pagina niet bekijken";
+    exit;
+}
+
+require 'database.php';
+
+// LEFT JOIN: auto's zonder afspraak hebben NULL bij afspraak_id
+$stmt = $conn->prepare("SELECT autos.*
+                        FROM autos
+                        LEFT JOIN afspraken ON autos.auto_id = afspraken.auto_id
+                        WHERE afspraken.afspraak_id IS NULL");
+$stmt->execute();
+$autos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail breed">
@@ -11,27 +30,20 @@
                     <th>Merk</th>
                     <th>Model</th>
                     <th>Bouwjaar</th>
-                    <th>Eigenaar</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Z-654-NR</td>
-                    <td>Peugeot</td>
-                    <td>208</td>
-                    <td>2023</td>
-                    <td>Sanne de Vries</td>
-                </tr>
-                <tr>
-                    <td>6-TVX-21</td>
-                    <td>Renault</td>
-                    <td>Clio</td>
-                    <td>2014</td>
-                    <td>Sanne de Vries</td>
-                </tr>
+                <?php foreach ($autos as $auto) : ?>
+                    <tr>
+                        <td><?php echo $auto['kenteken'] ?></td>
+                        <td><?php echo $auto['merk'] ?></td>
+                        <td><?php echo $auto['model'] ?></td>
+                        <td><?php echo $auto['bouwjaar'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

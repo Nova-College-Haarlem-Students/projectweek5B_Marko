@@ -1,4 +1,19 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+
+if ($_SESSION['role'] != 'medewerker' && $_SESSION['role'] != 'admin') {
+    echo "Je mag deze pagina niet bekijken";
+    exit;
+}
+
+require 'database.php';
+
+$stmt = $conn->prepare("SELECT * FROM diensten WHERE deleted_at IS NOT NULL");
+$stmt->execute();
+$diensten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail breed">
@@ -13,11 +28,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Banden wisselen</td>
-                    <td>2026-10-25</td>
-                    <td><a href="diensten_restore.php?id=4">Terugzetten</a></td>
-                </tr>
+                <?php foreach ($diensten as $dienst) : ?>
+                    <tr>
+                        <td><?php echo $dienst['naam'] ?></td>
+                        <td><?php echo $dienst['deleted_at'] ?></td>
+                        <td><a href="diensten_restore.php?id=<?php echo $dienst['dienst_id'] ?>">Terugzetten</a></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
 
@@ -25,4 +42,4 @@
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

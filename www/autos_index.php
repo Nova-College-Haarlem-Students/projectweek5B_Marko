@@ -1,4 +1,19 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+
+if ($_SESSION['role'] != 'klant') {
+    echo "Je mag deze pagina niet bekijken";
+    exit;
+}
+
+require 'database.php';
+
+$stmt = $conn->prepare("SELECT * FROM autos WHERE user_id = :user_id");
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$autos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail breed">
@@ -15,20 +30,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>12-ABC-3</td>
-                    <td>Volkswagen</td>
-                    <td>Golf</td>
-                    <td>2015</td>
-                    <td><a href="autos_wijzig.php?id=1">Wijzig</a></td>
-                </tr>
-                <tr>
-                    <td>K-456-DF</td>
-                    <td>Volkswagen</td>
-                    <td>Polo</td>
-                    <td>2019</td>
-                    <td><a href="autos_wijzig.php?id=2">Wijzig</a></td>
-                </tr>
+                <?php foreach ($autos as $auto) : ?>
+                    <tr>
+                        <td><?php echo $auto['kenteken'] ?></td>
+                        <td><?php echo $auto['merk'] ?></td>
+                        <td><?php echo $auto['model'] ?></td>
+                        <td><?php echo $auto['bouwjaar'] ?></td>
+                        <td><a href="autos_wijzig.php?id=<?php echo $auto['auto_id'] ?>">Wijzig</a></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
 
@@ -36,4 +46,4 @@
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

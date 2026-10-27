@@ -1,4 +1,13 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+require 'database.php';
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = :id");
+$stmt->execute(['id' => $_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail">
@@ -7,15 +16,15 @@
         <form action="profile_update_process.php" method="post">
             <p>
                 <label for="naam">Naam</label>
-                <input type="text" name="naam" id="naam" value="Jan Jansen">
+                <input type="text" name="naam" id="naam" value="<?php echo $user['naam'] ?>">
             </p>
             <p>
                 <label for="email">E-mail</label>
-                <input type="email" name="email" id="email" value="jan@voorbeeld.nl">
+                <input type="email" name="email" id="email" value="<?php echo $user['email'] ?>">
             </p>
             <button type="submit" class="knop">Opslaan</button>
         </form>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

@@ -1,4 +1,7 @@
-<?php include 'header.php'; ?>
+<?php
+session_start();
+require 'header.php';
+?>
 
 <main>
     <div class="detail">
@@ -20,4 +23,4 @@
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

@@ -1,4 +1,22 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+
+if ($_SESSION['role'] != 'admin') {
+    echo "Je mag deze pagina niet bekijken, alleen de admin";
+    exit;
+}
+
+require 'database.php';
+
+$stmt = $conn->prepare("SELECT logboek.*, users.naam
+                        FROM logboek
+                        LEFT JOIN users ON logboek.user_id = users.user_id
+                        ORDER BY logboek.log_id DESC");
+$stmt->execute();
+$regels = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail breed">
@@ -13,19 +31,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>2026-10-27 10:15</td>
-                    <td>Piet</td>
-                    <td>Prijs APK-keuring aangepast naar &euro; 39,95</td>
-                </tr>
-                <tr>
-                    <td>2026-10-26 16:40</td>
-                    <td>Ali</td>
-                    <td>Dienst Banden wisselen uitgezet</td>
-                </tr>
+                <?php foreach ($regels as $regel) : ?>
+                    <tr>
+                        <td><?php echo $regel['created_at'] ?></td>
+                        <td><?php echo $regel['naam'] ?></td>
+                        <td><?php echo $regel['actie'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

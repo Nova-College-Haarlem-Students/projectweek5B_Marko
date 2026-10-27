@@ -1,4 +1,31 @@
-<?php include 'header.php'; ?>
+<?php
+session_start();
+require 'database.php';
+
+// sorteren
+$sql = "SELECT * FROM diensten WHERE deleted_at IS NULL ORDER BY naam";
+
+if (isset($_GET['sorteer'])) {
+    if ($_GET['sorteer'] == 'prijs_op') {
+        $sql = "SELECT * FROM diensten WHERE deleted_at IS NULL ORDER BY prijs ASC";
+    }
+    if ($_GET['sorteer'] == 'prijs_af') {
+        $sql = "SELECT * FROM diensten WHERE deleted_at IS NULL ORDER BY prijs DESC";
+    }
+    if ($_GET['sorteer'] == 'duur_op') {
+        $sql = "SELECT * FROM diensten WHERE deleted_at IS NULL ORDER BY duur_minuten ASC";
+    }
+    if ($_GET['sorteer'] == 'duur_af') {
+        $sql = "SELECT * FROM diensten WHERE deleted_at IS NULL ORDER BY duur_minuten DESC";
+    }
+}
+
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$diensten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <form method="GET" class="filter">
@@ -12,35 +39,16 @@
     <h2>Onze diensten</h2>
 
     <div class="diensten">
-        <div class="dienst">
-            <h3>APK-keuring</h3>
-            <p>Wettelijke keuring van je auto.</p>
-            <p>Duur: 45 minuten</p>
-            <p class="prijs">&euro; 39,95</p>
-            <a href="diensten_detail.php?id=1" class="knop">Bekijk details</a>
-        </div>
-        <div class="dienst">
-            <h3>Kleine beurt</h3>
-            <p>Olie en filter vervangen, alles nalopen.</p>
-            <p>Duur: 60 minuten</p>
-            <p class="prijs">&euro; 129,00</p>
-            <a href="diensten_detail.php?id=1" class="knop">Bekijk details</a>
-        </div>
-        <div class="dienst">
-            <h3>Grote beurt</h3>
-            <p>Uitgebreid onderhoud volgens de fabriek.</p>
-            <p>Duur: 120 minuten</p>
-            <p class="prijs">&euro; 279,00</p>
-            <a href="diensten_detail.php?id=1" class="knop">Bekijk details</a>
-        </div>
-        <div class="dienst">
-            <h3>Banden wisselen</h3>
-            <p>Zomer- of winterbanden omzetten.</p>
-            <p>Duur: 30 minuten</p>
-            <p class="prijs">&euro; 49,50</p>
-            <a href="diensten_detail.php?id=1" class="knop">Bekijk details</a>
-        </div>
+        <?php foreach ($diensten as $dienst) : ?>
+            <div class="dienst">
+                <h3><?php echo $dienst['naam'] ?></h3>
+                <p><?php echo $dienst['omschrijving'] ?></p>
+                <p>Duur: <?php echo $dienst['duur_minuten'] ?> minuten</p>
+                <p class="prijs">&euro; <?php echo $dienst['prijs'] ?></p>
+                <a href="diensten_detail.php?id=<?php echo $dienst['dienst_id'] ?>" class="knop">Bekijk details</a>
+            </div>
+        <?php endforeach; ?>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

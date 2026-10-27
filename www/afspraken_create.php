@@ -1,4 +1,25 @@
-<?php include 'header.php'; ?>
+<?php
+require 'session_check.php';
+
+if ($_SESSION['role'] != 'klant') {
+    echo "Je mag deze pagina niet bekijken";
+    exit;
+}
+
+require 'database.php';
+
+// mijn auto's
+$stmt = $conn->prepare("SELECT * FROM autos WHERE user_id = :user_id");
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$autos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// diensten
+$stmt = $conn->prepare("SELECT * FROM diensten WHERE deleted_at IS NULL");
+$stmt->execute();
+$diensten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+require 'header.php';
+?>
 
 <main>
     <div class="detail">
@@ -8,38 +29,39 @@
             <p>
                 <label for="auto">Auto</label>
                 <select id="auto" name="auto_id">
-                    <option value="1">12-ABC-3 - Volkswagen Golf</option>
-                    <option value="2">K-456-DF - Volkswagen Polo</option>
+                    <?php foreach ($autos as $auto) : ?>
+                        <option value="<?php echo $auto['auto_id'] ?>"><?php echo $auto['kenteken'] ?> - <?php echo $auto['merk'] ?></option>
+                    <?php endforeach; ?>
                 </select>
             </p>
             <p>
                 <label for="dienst">Dienst</label>
                 <select id="dienst" name="dienst_id">
-                    <option value="1">APK-keuring (&euro; 39,95)</option>
-                    <option value="2">Kleine beurt (&euro; 129,00)</option>
-                    <option value="3">Grote beurt (&euro; 279,00)</option>
-                    <option value="4">Banden wisselen (&euro; 49,50)</option>
+                    <?php foreach ($diensten as $dienst) : ?>
+                        <option value="<?php echo $dienst['dienst_id'] ?>"><?php echo $dienst['naam'] ?> (&euro; <?php echo $dienst['prijs'] ?>)</option>
+                    <?php endforeach; ?>
                 </select>
             </p>
             <p>
                 <label for="datum">Datum</label>
                 <input type="date" id="datum" name="datum">
             </p>
-
-            <!-- Later: met AJAX (fetch) de vrije tijden ophalen -->
-            <button type="button" class="knop">Toon vrije tijden</button>
-
-            <div class="tijden">
-                <button type="button">08:00</button>
-                <button type="button">09:00</button>
-                <button type="button">11:00</button>
-                <button type="button">13:00</button>
-                <button type="button">15:00</button>
-            </div>
-
+            <p>
+                <label for="tijd">Tijd</label>
+                <select id="tijd" name="tijd">
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                </select>
+            </p>
             <button type="submit" class="knop">Afspraak maken</button>
         </form>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>

@@ -1,4 +1,7 @@
-<?php include 'header.php'; ?>
+<?php
+session_start();
+require 'header.php';
+?>
 
 <main>
     <div class="detail">
@@ -17,13 +20,9 @@
                 <label for="password">Wachtwoord</label>
                 <input type="password" name="password" id="password">
             </p>
-            <p>
-                <label for="password2">Herhaal wachtwoord</label>
-                <input type="password" name="password2" id="password2">
-            </p>
             <button type="submit" class="knop">Registreren</button>
         </form>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php require 'footer.php' ?>
